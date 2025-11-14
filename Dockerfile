@@ -1,14 +1,19 @@
-FROM amazoncorretto:22
-
-LABEL version="1.0"
-
+# Step 1: Build the application with Maven
+FROM maven:3.9.6-amazoncorretto-22 AS build
 WORKDIR /app
 
-# Create logs directory
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn -e -DskipTests clean package
+
+# Step 2: Run the application
+FROM amazoncorretto:22
+WORKDIR /app
+
 RUN mkdir -p /app/logs
 
-COPY target/backend-0.0.1-SNAPSHOT.jar backend.jar
+COPY --from=build /app/target/*.jar backend.jar
 
 EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "backend.jar"]

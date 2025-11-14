@@ -5,7 +5,7 @@ services:
     image: postgres:15
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Okuhle
+      POSTGRES_PASSWORD: Luke@2471
       POSTGRES_DB: hrdatabase
     ports:
       - "5432:5432"
