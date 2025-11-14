@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Okuhle
+      POSTGRES_DB: hrdatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d hrdatabase"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_URL=jdbc:postgresql://postgres:5432/hrdatabase
+      - DB_USER=postgres
+      - DB_PASS=Okuhle
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  postgres_data:
