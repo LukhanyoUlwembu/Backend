@@ -1,18 +1,27 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8"/>
+
+    <!-- Open Graph Metadata -->
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${description}">
     <meta property="og:image" content="${image}">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="${frontendUrl}/jobDetail/${id}">
+    <meta property="og:url" content="${url}">
+
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
+    
     <title>${title}</title>
 </head>
 <body>
-    <!-- Optional redirect for users -->
+    <!-- Redirect to frontend for human users -->
     <script>
-        window.location.href = "${frontendUrl}/jobDetail/${id}";
+        setTimeout(() => {
+            window.location.href = "${url}";
+        }, 150); 
+        // Delay allows crawlers to finish reading metadata
     </script>
 </body>
 </html>
