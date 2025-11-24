@@ -15,44 +15,35 @@ public class ShareController {
     @Autowired
     private HrServiceImplementation hr;
 
-    @GetMapping("/share/job/{id}")
-    public String shareJob(@PathVariable long id, Model model) {
+   @GetMapping("/share/job/{id}")
+public String shareJob(@PathVariable long id, Model model) {
+    JobPosting job = hr.getJobPosting(id);
 
-        JobPosting job = hr.getJobPosting(id);
+    String frontendUrl = "https://ulwemburecruite.netlify.app"; // <- set your frontend URL here
 
-        if (job == null) {
-            // fallback metadata
-            model.addAttribute("title", "Job not found");
-            model.addAttribute("description", "This job posting does not exist.");
-            model.addAttribute("image", "https://yourdomain.com/default-job.png");
-            model.addAttribute("url", "https://yourdomain.com");
-            model.addAttribute("id", id);
-            return "job-share";
-        }
-
-        // --------- Build metadata dynamically ---------
-        String title = job.getJobTitle();
-        String description = job.getJobDescription() != null
-                ? job.getJobDescription()
-                : "View job details.";
-
-        // shorten description for LinkedIn/Facebook
-        if (description.length() > 180) {
-            description = description.substring(0, 180) + "...";
-        }
-
-        // You can later change to job-specific image
-        String imageUrl = "https://i.pinimg.com/1200x/2c/5d/9b/2c5d9b70a83fe9a1ef64475b34186cff.jpg";
-
-        String url = "https://yourdomain.com/share/job/" + id;
-
-        // -------- Add attributes --------
-        model.addAttribute("title", title);
-        model.addAttribute("description", description);
-        model.addAttribute("image", imageUrl);
-        model.addAttribute("url", url);
+    if (job == null) {
+        model.addAttribute("title", "Job not found");
+        model.addAttribute("description", "This job posting does not exist.");
+        model.addAttribute("image", "https://yourdomain.com/default-job.png");
+        model.addAttribute("url", frontendUrl + "/jobDetail/" + id); // OG url points to frontend
         model.addAttribute("id", id);
-
-        return "job-share"; // return HTML page
+        return "job-share";
     }
+
+    String title = job.getJobTitle();
+    String description = job.getJobDescription() != null ? job.getJobDescription() : "View job details.";
+    if (description.length() > 180) description = description.substring(0, 180) + "...";
+
+    String imageUrl = "https://i.pinimg.com/1200x/2c/5d/9b/2c5d9b70a83fe9a1ef64475b34186cff.jpg";
+
+    // Pass to the template
+    model.addAttribute("title", title);
+    model.addAttribute("description", description);
+    model.addAttribute("image", imageUrl);
+    model.addAttribute("url", frontendUrl + "/jobDetail/" + id); // OG url points to frontend
+    model.addAttribute("id", id);
+
+    return "job-share"; // returns HTML with OG tags
+}
+
 }

@@ -1,23 +1,18 @@
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8"/>
-
-    <!-- Social preview metadata -->
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${description}">
     <meta property="og:image" content="${image}">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="${url}">
-
+    <meta property="og:url" content="${frontendUrl}/jobDetail/${id}">
     <meta name="twitter:card" content="summary_large_image">
-
     <title>${title}</title>
 </head>
 <body>
-<script>
-    // Redirect user to job page on frontend
-    window.location.href = "/jobDetail/${id}";
-</script>
+    <!-- Optional redirect for users -->
+    <script>
+        window.location.href = "${frontendUrl}/jobDetail/${id}";
+    </script>
 </body>
 </html>
